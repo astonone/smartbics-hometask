@@ -16,10 +16,6 @@
     <spring:url value="/resources/css/modern-business.css" var="startertemplate"/>
     <link href="${startertemplate}" rel="stylesheet" />
 
-    <!-- Custom Fonts -->
-    <spring:url value="/resources/css/font-awesome.min.css" var="fontawesome"/>
-    <link href="${fontawesome}" rel="stylesheet" />
-
     <!-- jQuery -->
     <spring:url value="/resources/js/jquery.js" var="jqueryjs"/>
     <script src="${jqueryjs}"></script>
@@ -27,7 +23,6 @@
     <!-- Bootstrap Core JavaScript -->
     <spring:url value="/resources/js/bootstrap.min.js" var="js"/>
     <script src="${js}"></script>
-
 </head>
 
 <body>
@@ -43,7 +38,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html">Hello</a>
+            <a class="navbar-brand" href="index.html">Система бронирования</a>
         </div>
         <!-- /.navbar-collapse -->
     </div>
