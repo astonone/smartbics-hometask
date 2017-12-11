@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "booking")
+@Table(name = "bookings")
 public class Booking {
 
     @Id
@@ -17,7 +17,7 @@ public class Booking {
     @Column(name = "worktime")
     private String companyWorkTime;
 
-    @Column(name = "date", insertable = false, updatable = false)
+    @Column(name = "date")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     @DateTimeFormat(pattern = "yyyy/dd/mm H:m:s:S")
     private LocalDateTime requestDate;

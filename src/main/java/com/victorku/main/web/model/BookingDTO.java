@@ -1,7 +1,6 @@
 package com.victorku.main.web.model;
 
 import com.victorku.main.model.Booking;
-import org.joda.time.LocalDateTime;
 
 public class BookingDTO {
 
