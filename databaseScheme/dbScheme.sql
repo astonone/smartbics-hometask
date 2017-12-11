@@ -30,5 +30,5 @@ CREATE TABLE IF NOT EXISTS Bookings (
   employee VARCHAR(45) NULL,
   bookingDate TIMESTAMP(0) NULL,
   bookingTime INT NULL,
-  PRIMARY KEY (idOrders))
+  PRIMARY KEY (id))
 ;

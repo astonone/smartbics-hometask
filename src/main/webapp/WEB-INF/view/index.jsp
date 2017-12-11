@@ -10,52 +10,104 @@
 
     <jsp:body>
 
-        <div class="container">
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">
-                        <small>Здесь вы сможете забронировать комнату для перегоров в удобное для вас время
-                    </h1>
-                </div>
-                <div class="form-group">
-                    <label for="comment">Введите данные для бронирования:</label>
-                </div>
-                <textarea class="form-control" rows="5" id="comment"></textarea>
-                <button type="button" class="btn btn-success booking-button">Запрос на бронирование</button>
-                <div class="panel-group">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" href="#collapse1">Нажмите чтобы узнать подробности</a>
-                            </h4>
+        <ul class="container">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#home">Бронирование</a></li>
+                <li><a data-toggle="tab" href="#menu1">Просмотр брони по дате</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="home" class="tab-pane fade in active">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header">
+                                <small>Здесь вы сможете забронировать комнату для перегоров в удобное для вас время
+                                </small>
+                            </h1>
                         </div>
-                        <div id="collapse1" class="panel-collapse collapse">
-                            <div class="panel-body">
-                                Первая строка входного текста представляет часы работы компании, в 24-часовом формате.<br>
-                                Остальная часть ввода представляет собой индивидуальные запросы на бронирование.<br>
-                                Каждый запрос на бронирование имеет следующий формат:<br>
-                                [время отправки запроса в формате YYYY-MM-DD HH: MM: SS] [идентификатор сотрудника]<br>
-                                [время начала встречи в формате YYYY-MM-DD HH: MM] [продолжительность встречи в часах]<br>
-                            </div>
-                            <div class="panel-footer">
-                                <b>Пример запроса:</b><br>
-                                0900 1730<br>
-                                2011-03-17 10:17:06<br>
-                                EMP001<br>
-                                2011-03-21 09:00 2<br>
-                                2011-03-16 12:34:56<br>
-                                EMP002<br>
-                                2011-03-21 09:00 2<br>
-                                2011-03-16 09:28:23<br>
-                                EMP003<br>
-                                2011-03-22 14:00 2<br>
-                                2011-03-17 11:23:45<br>
+                        <div class="form-group">
+                            <label for="comment">Введите данные для бронирования:</label>
+                        </div>
+                        <textarea class="form-control" rows="5" id="comment"></textarea>
+                        <button type="button" class="btn btn-success" style="margin-bottom: 10px;
+                                                        margin-top: 10px">Запрос на бронирование
+                        </button>
+                            <%--<div class="alert alert-success">
+
+                            </div>--%>
+                        <div class="panel-group">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" href="#collapse1">Нажмите чтобы узнать подробности</a>
+                                    </h4>
+                                </div>
+                                <div id="collapse1" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        Первая строка входного текста представляет часы работы компании, в 24-часовом
+                                        формате.<br>
+                                        Остальная часть ввода представляет собой индивидуальные запросы на бронирование.<br>
+                                        Каждый запрос на бронирование имеет следующий формат:<br>
+                                        [время отправки запроса в формате YYYY-MM-DD HH: MM: SS] [идентификатор
+                                        сотрудника]<br>
+                                        [время начала встречи в формате YYYY-MM-DD HH: MM] [продолжительность встречи в
+                                        часах]<br>
+                                    </div>
+                                    <div class="panel-footer">
+                                        <b>Пример запроса:</b><br>
+                                        0900 1730<br>
+                                        2011-03-17 10:17:06<br>
+                                        EMP001<br>
+                                        2011-03-21 09:00 2<br>
+                                        2011-03-16 12:34:56<br>
+                                        EMP002<br>
+                                        2011-03-21 09:00 2<br>
+                                        2011-03-16 09:28:23<br>
+                                        EMP003<br>
+                                        2011-03-22 14:00 2<br>
+                                        2011-03-17 11:23:45<br>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div id="menu1" class="tab-pane fade">
+                    <div class="row">
+                        <div class="form-group">
+                            <h1 class="page-header">
+                                <small>В данном разделе можно посмотреть уже имеющиеся брони</small>
+                            </h1>
+                            <label for="date">Введите дату:</label>
+                            <input type="text" class="form-control" id="date" placeholder="ГГГГ/ММ/ДД">
+                            <button type="button" class="btn btn-success booking-button" style="margin-bottom: 10px;
+                                                        margin-top: 10px">Посмотреть результаты
+                            </button>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Рабочие часы компании</th>
+                                    <th>Дата отправки запроса</th>
+                                    <th>Сотрудник</th>
+                                    <th>Дата бронирования</th>
+                                    <th>Часы</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>test</td>
+                                    <td>test</td>
+                                    <td>test</td>
+                                    <td>test</td>
+                                    <td>test</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
+            </div>
+        </ul>
         </div>
 
     </jsp:body>

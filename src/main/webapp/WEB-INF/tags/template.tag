@@ -23,6 +23,18 @@
     <!-- Bootstrap Core JavaScript -->
     <spring:url value="/resources/js/bootstrap.min.js" var="js"/>
     <script src="${js}"></script>
+
+    <!-- AngularJS min production framework -->
+    <spring:url value="/resources/angularjs/angular.min.js" var="angularjs" />
+    <script src="${angularjs}"></script>
+
+    <!-- AngularJS min production routing framework -->
+    <spring:url value="/resources/angularjs/angular-route.min.js" var="angularroute" />
+    <script src="${angularroute}"></script>
+
+    <!-- AngularJS min production resource -->
+    <spring:url value="/resources/angularjs/angular-resource.min.js" var="angularresource" />
+    <script src="${angularresource}"></script>
 </head>
 
 <body>
