@@ -3,6 +3,9 @@ app.controller('BookingController', function ($scope, $http) {
 
     $scope.existsBookingsByDate = "";
     $scope.bookingsData = [];
+    $scope.bookingsRequestData = "";
+    $scope.isRequested = false;
+    $scope.successfullBookingsData = [];
 
     $scope.getBookingsByDate = function () {
         let dateArr = $scope.existsBookingsByDate.split("/");
@@ -14,7 +17,7 @@ app.controller('BookingController', function ($scope, $http) {
                 $scope.parseBookingData($scope.bookingsData);
             })
             .error(function (data, status, headers, config) {
-                alert("error getting data");
+                alert("Возникла ошибка, проверьте корректность формата введенной вами даты");
             });
 
     };
@@ -58,4 +61,57 @@ app.controller('BookingController', function ($scope, $http) {
         return (!str1 ) ? str : (!n) ? str1 + str : str.slice(0, n) + str1 + str.slice(n);
     };
 
+    $scope.sendRequestForBooking = function () {
+        let parseArr = $scope.bookingsRequestData.split("\n");
+        let sendData = $scope.preparePutObjects(parseArr);
+        $http.put('booking/create', sendData).success(function (data, status, headers, config) {
+            $scope.post = data;
+            $scope.parseBookingData($scope.post.bookingsDTOList);
+            $scope.successfullBookingsData = $scope.post.bookingsDTOList;
+            $scope.isRequested = true;
+        }).error(function (data, status, headers, config) {
+            alert("При бронировании возникла ошибка,проверьте корректность введенных данных");
+        });
+    };
+
+    $scope.preparePutObjects = function (parseArr) {
+        let workTimes = parseArr[0];
+        let result = [];
+        for (let i = 1; i < parseArr.length - 1; i += 2) {
+            let dateAndEmployee = parseArr[i];
+            let bookingDetails = parseArr[i + 1];
+            let dateAndEmployeeParseArr = dateAndEmployee.split(" ");
+            let date = dateAndEmployeeParseArr[0].split("-");
+            let time = dateAndEmployeeParseArr[1].split(":");
+            let employee = dateAndEmployeeParseArr[2];
+            let bookingDetailsParseArr = bookingDetails.split(" ");
+            let dateBooking = bookingDetailsParseArr[0].split("-");
+            let timeBooking = bookingDetailsParseArr[1].split(":");
+            let bookingHours = bookingDetailsParseArr[2];
+            let entity = {
+                companyWorkTime: workTimes,
+                requestDate: {
+                    year: date[0],
+                    month: date[1],
+                    day: date[2],
+                    hours: time[0],
+                    minutes: time[1],
+                    seconds: time[2]
+                },
+                employee: employee,
+                bookingDate:
+                    {
+                        year: dateBooking[0],
+                        month: dateBooking[1],
+                        day: dateBooking[2],
+                        hours: timeBooking[0],
+                        minutes: timeBooking[1],
+                        seconds: 0
+                    },
+                bookingTime: bookingHours
+            };
+            result.push(entity);
+        }
+        return {companyWorkTime: workTimes, bookingsList: result};
+    };
 });

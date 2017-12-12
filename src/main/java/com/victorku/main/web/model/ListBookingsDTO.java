@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ListBookingsDTO {
 
-    List<BookingDTO> bookingsDTOList;
+    private List<BookingDTO> bookingsDTOList;
 
     public ListBookingsDTO() {
     }

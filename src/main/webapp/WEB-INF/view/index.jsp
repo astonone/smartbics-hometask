@@ -26,13 +26,34 @@
                         <div class="form-group">
                             <label for="comment">Введите данные для бронирования:</label>
                         </div>
-                        <textarea class="form-control" rows="5" id="comment"></textarea>
+                        <textarea class="form-control" rows="5" id="comment" ng-model="bookingsRequestData"></textarea>
                         <button type="button" class="btn btn-success" style="margin-bottom: 10px;
-                                                        margin-top: 10px">Запрос на бронирование
+                                                        margin-top: 10px" ng-click="sendRequestForBooking()">Запрос на
+                            бронирование
                         </button>
-                            <%--<div class="alert alert-success">
-
-                            </div>--%>
+                        <div class="alert alert-success" ng-show="isRequested">
+                            <strong>Следующие бронирования прошли успешно</strong><br>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Рабочие часы компании</th>
+                                    <th>Дата отправки запроса</th>
+                                    <th>Сотрудник</th>
+                                    <th>Дата бронирования</th>
+                                    <th>Часы</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="row in successfullBookingsData">
+                                    <td>{{row.companyWorkTime}}</td>
+                                    <td>{{row.requestDate}}</td>
+                                    <td>{{row.employee}}</td>
+                                    <td>{{row.bookingDate}}</td>
+                                    <td>{{row.bookingTime}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="panel-group">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -73,9 +94,11 @@
                                 <small>В данном разделе можно посмотреть уже имеющиеся брони</small>
                             </h1>
                             <label for="date">Введите дату:</label>
-                            <input type="text" class="form-control" id="date" placeholder="ГГГГ/ММ/ДД" ng-model="existsBookingsByDate">
+                            <input type="text" class="form-control" id="date" placeholder="ГГГГ/ММ/ДД"
+                                   ng-model="existsBookingsByDate">
                             <button type="button" class="btn btn-success booking-button" style="margin-bottom: 10px;
-                                                        margin-top: 10px" ng-click="getBookingsByDate()">Посмотреть результаты
+                                                        margin-top: 10px" ng-click="getBookingsByDate()">Посмотреть
+                                результаты
                             </button>
                             <table class="table">
                                 <thead>
@@ -102,7 +125,7 @@
                     <div>
                     </div>
                 </div>
-                </div>
+            </div>
             </div>
             </div>
         </ul>

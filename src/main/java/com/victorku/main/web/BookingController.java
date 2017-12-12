@@ -6,12 +6,14 @@ import com.victorku.main.service.BookingService;
 import com.victorku.main.web.model.BookingDTO;
 import com.victorku.main.web.model.ErrorResponseBody;
 import com.victorku.main.web.model.ListBookingsDTO;
+import com.victorku.main.web.model.RequestBookingEntityDTO;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,12 +33,18 @@ public class BookingController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.PUT)
-    public ResponseEntity<?> createBooking(@RequestBody BookingDTO bookingDTO) {
-        LocalDateTime requestDate = bookingDTO.getRequestDate() == null ? null : bookingDTO.getRequestDate().getLocalDateData();
-        LocalDateTime bookingDate = bookingDTO.getBookingDate() == null ? null : bookingDTO.getBookingDate().getLocalDateData();
-        Booking booking = bookingService.createBooking(bookingDTO.getCompanyWorkTime(), requestDate, bookingDTO.getEmployee(),
-                bookingDate, bookingDTO.getBookingTime());
-        return new ResponseEntity<>(convert(booking), HttpStatus.OK);
+    public ResponseEntity<?> createBooking(@RequestBody RequestBookingEntityDTO requestBookingEntityDTO) {
+        List<Booking> bookingList = new ArrayList<>();
+        for (BookingDTO bookingDTO : requestBookingEntityDTO.getBookingsList()) {
+            LocalDateTime requestDate = bookingDTO.getRequestDate() == null ? null : bookingDTO.getRequestDate().getLocalDateData();
+            LocalDateTime bookingDate = bookingDTO.getBookingDate() == null ? null : bookingDTO.getBookingDate().getLocalDateData();
+            Booking booking = bookingService.createBooking(requestBookingEntityDTO.getCompanyWorkTime(), requestDate, bookingDTO.getEmployee(),
+                    bookingDate, bookingDTO.getBookingTime());
+            if (booking != null) {
+                bookingList.add(booking);
+            }
+        }
+        return new ResponseEntity<>(convert(bookingList), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/findByDate", method = RequestMethod.GET)
