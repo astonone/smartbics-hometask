@@ -9,8 +9,7 @@
     <jsp:attribute name="title">Система бронирования</jsp:attribute>
 
     <jsp:body>
-
-        <ul class="container">
+        <ul class="container" ng-app="booking-service" ng-controller="BookingController">
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#home">Бронирование</a></li>
                 <li><a data-toggle="tab" href="#menu1">Просмотр брони по дате</a></li>
@@ -55,16 +54,12 @@
                                     <div class="panel-footer">
                                         <b>Пример запроса:</b><br>
                                         0900 1730<br>
-                                        2011-03-17 10:17:06<br>
-                                        EMP001<br>
+                                        2011-03-17 10:17:06 EMP001<br>
                                         2011-03-21 09:00 2<br>
-                                        2011-03-16 12:34:56<br>
-                                        EMP002<br>
+                                        2011-03-16 12:34:56 EMP002<br>
                                         2011-03-21 09:00 2<br>
-                                        2011-03-16 09:28:23<br>
-                                        EMP003<br>
+                                        2011-03-16 09:28:23 EMP003<br>
                                         2011-03-22 14:00 2<br>
-                                        2011-03-17 11:23:45<br>
                                     </div>
                                 </div>
                             </div>
@@ -78,9 +73,9 @@
                                 <small>В данном разделе можно посмотреть уже имеющиеся брони</small>
                             </h1>
                             <label for="date">Введите дату:</label>
-                            <input type="text" class="form-control" id="date" placeholder="ГГГГ/ММ/ДД">
+                            <input type="text" class="form-control" id="date" placeholder="ГГГГ/ММ/ДД" ng-model="existsBookingsByDate">
                             <button type="button" class="btn btn-success booking-button" style="margin-bottom: 10px;
-                                                        margin-top: 10px">Посмотреть результаты
+                                                        margin-top: 10px" ng-click="getBookingsByDate()">Посмотреть результаты
                             </button>
                             <table class="table">
                                 <thead>
@@ -93,17 +88,20 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>test</td>
-                                    <td>test</td>
-                                    <td>test</td>
-                                    <td>test</td>
-                                    <td>test</td>
+                                <tr ng-repeat="row in bookingsData">
+                                    <td>{{row.companyWorkTime}}</td>
+                                    <td>{{row.requestDate}}</td>
+                                    <td>{{row.employee}}</td>
+                                    <td>{{row.bookingDate}}</td>
+                                    <td>{{row.bookingTime}}</td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    <div>
+                    </div>
+                </div>
                 </div>
             </div>
             </div>

@@ -35,6 +35,10 @@
     <!-- AngularJS min production resource -->
     <spring:url value="/resources/angularjs/angular-resource.min.js" var="angularresource" />
     <script src="${angularresource}"></script>
+
+    <!-- Booking controller -->
+    <spring:url value="/resources/controllers/booking-controller.js" var="bookingcontroller" />
+    <script src="${bookingcontroller}"></script>
 </head>
 
 <body>
