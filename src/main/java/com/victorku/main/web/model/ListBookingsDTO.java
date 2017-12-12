@@ -19,7 +19,7 @@ public class ListBookingsDTO {
         }
 
         List<BookingDTO> bookingList = new ArrayList<>();
-        for (Booking booking: dbModel) {
+        for (Booking booking : dbModel) {
             bookingList.add(new BookingDTO(booking));
         }
         this.bookingsDTOList = bookingList;

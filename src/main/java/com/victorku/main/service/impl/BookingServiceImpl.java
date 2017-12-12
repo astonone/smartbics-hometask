@@ -21,14 +21,14 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Booking createBooking(String companyWorkTime, String employee, LocalDateTime bookingDate, Long bookingTime) {
-        Booking booking = new Booking(companyWorkTime,employee,bookingDate,bookingTime);
+    public Booking createBooking(String companyWorkTime, LocalDateTime requestDate, String employee, LocalDateTime bookingDate, Long bookingTime) {
+        Booking booking = new Booking(companyWorkTime, requestDate, employee, bookingDate, bookingTime);
         return bookingRepository.save(booking);
     }
 
     @Override
-    public List<Booking> getBookingsByDate(LocalDateTime start,LocalDateTime end) {
-        List<Booking> bookingList = bookingRepository.findByBookingDateBetween(start,end);
+    public List<Booking> getBookingsByDate(LocalDateTime start, LocalDateTime end) {
+        List<Booking> bookingList = bookingRepository.findByBookingDateBetween(start, end);
         return bookingList;
     }
 }

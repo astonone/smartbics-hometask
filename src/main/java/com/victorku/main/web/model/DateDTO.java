@@ -28,12 +28,11 @@ public class DateDTO {
     }
 
     @JsonIgnore
-    public LocalDateTime getLocalDateData()
-    {
+    public LocalDateTime getLocalDateData() {
         try {
-            return new LocalDateTime(year, month, day,hours,minutes,seconds);
-        }catch (IllegalArgumentException illegalArgument) {
-            return new LocalDateTime(1970,1,1,0,0,0);
+            return new LocalDateTime(year, month, day, hours, minutes, seconds);
+        } catch (IllegalArgumentException illegalArgument) {
+            return new LocalDateTime(1970, 1, 1, 0, 0, 0);
         }
     }
 

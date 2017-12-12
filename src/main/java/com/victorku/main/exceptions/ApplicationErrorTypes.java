@@ -2,7 +2,7 @@ package com.victorku.main.exceptions;
 
 public enum ApplicationErrorTypes {
 
-    BOOKING_ID_NOT_FOUND(1,"booking with this id is not found");
+    BOOKING_ID_NOT_FOUND(1, "booking with this id is not found");
 
     private String message;
     private int code;

@@ -32,19 +32,20 @@ public class BookingController {
 
     @RequestMapping(value = "/create", method = RequestMethod.PUT)
     public ResponseEntity<?> createBooking(@RequestBody BookingDTO bookingDTO) {
+        LocalDateTime requestDate = bookingDTO.getRequestDate() == null ? null : bookingDTO.getRequestDate().getLocalDateData();
         LocalDateTime bookingDate = bookingDTO.getBookingDate() == null ? null : bookingDTO.getBookingDate().getLocalDateData();
-        Booking booking = bookingService.createBooking(bookingDTO.getCompanyWorkTime(), bookingDTO.getEmployee(),
+        Booking booking = bookingService.createBooking(bookingDTO.getCompanyWorkTime(), requestDate, bookingDTO.getEmployee(),
                 bookingDate, bookingDTO.getBookingTime());
         return new ResponseEntity<>(convert(booking), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/findByDate", method = RequestMethod.GET)
-    public ResponseEntity<?> getBookingList(@RequestParam("year") Integer year,@RequestParam("month") Integer month,
-                                            @RequestParam("day") Integer day){
-        LocalDateTime start = new LocalDateTime(year,month,day,0,0,0);
-        LocalDateTime end = new LocalDateTime(year,month,day,23,59,59);
-        List<Booking> bookingList = bookingService.getBookingsByDate(start,end);
-        return new ResponseEntity<>(convert(bookingList),HttpStatus.OK);
+    public ResponseEntity<?> getBookingList(@RequestParam("year") Integer year, @RequestParam("month") Integer month,
+                                            @RequestParam("day") Integer day) {
+        LocalDateTime start = new LocalDateTime(year, month, day, 0, 0, 0);
+        LocalDateTime end = new LocalDateTime(year, month, day, 23, 59, 59);
+        List<Booking> bookingList = bookingService.getBookingsByDate(start, end);
+        return new ResponseEntity<>(convert(bookingList), HttpStatus.OK);
     }
 
 
@@ -52,7 +53,9 @@ public class BookingController {
         return (model == null) ? null : new BookingDTO(model);
     }
 
-    private ListBookingsDTO convert(List<Booking> dbModel) { return (dbModel == null) ? null : new ListBookingsDTO(dbModel); }
+    private ListBookingsDTO convert(List<Booking> dbModel) {
+        return (dbModel == null) ? null : new ListBookingsDTO(dbModel);
+    }
 
     private ResponseEntity<ErrorResponseBody> getErrorResponseBody(ApplicationErrorTypes errorType) {
         return new ResponseEntity<>(new ErrorResponseBody(errorType), HttpStatus.NOT_FOUND);

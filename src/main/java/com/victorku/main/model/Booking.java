@@ -34,12 +34,11 @@ public class Booking {
     private Long bookingTime;
 
     public Booking() {
-        this.requestDate = new LocalDateTime();
     }
 
-    public Booking(String companyWorkTime, String employee, LocalDateTime bookingDate, Long bookingTime) {
-        this();
+    public Booking(String companyWorkTime, LocalDateTime requestDate, String employee, LocalDateTime bookingDate, Long bookingTime) {
         this.companyWorkTime = companyWorkTime;
+        this.requestDate = requestDate;
         this.employee = employee;
         this.bookingDate = bookingDate;
         this.bookingTime = bookingTime;
