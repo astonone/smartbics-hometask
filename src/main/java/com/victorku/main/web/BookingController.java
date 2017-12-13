@@ -7,6 +7,7 @@ import com.victorku.main.web.model.BookingDTO;
 import com.victorku.main.web.model.ErrorResponseBody;
 import com.victorku.main.web.model.ListBookingsDTO;
 import com.victorku.main.web.model.RequestBookingEntityDTO;
+import org.joda.time.DateTimeComparator;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -35,6 +38,11 @@ public class BookingController {
     @RequestMapping(value = "/create", method = RequestMethod.PUT)
     public ResponseEntity<?> createBooking(@RequestBody RequestBookingEntityDTO requestBookingEntityDTO) {
         List<Booking> bookingList = new ArrayList<>();
+
+        // Сортируем брони по времени подачи заявок
+        Collections.sort(requestBookingEntityDTO.getBookingsList(),
+                (t2, t1) -> (int)(t2.getRequestDate().getLocalDateData().toDateTime().getMillis() - t1.getRequestDate().getLocalDateData().toDateTime().getMillis()));
+
         for (BookingDTO bookingDTO : requestBookingEntityDTO.getBookingsList()) {
             LocalDateTime requestDate = bookingDTO.getRequestDate() == null ? null : bookingDTO.getRequestDate().getLocalDateData();
             LocalDateTime bookingDate = bookingDTO.getBookingDate() == null ? null : bookingDTO.getBookingDate().getLocalDateData();
@@ -44,6 +52,10 @@ public class BookingController {
                 bookingList.add(booking);
             }
         }
+        // Сортируем заявки для группировки до дням на выходе
+        Collections.sort(bookingList,
+                (t2, t1) -> (int)(t2.getBookingDate().toDateTime().getMillis() - t1.getBookingDate().toDateTime().getMillis()));
+
         return new ResponseEntity<>(convert(bookingList), HttpStatus.OK);
     }
 
