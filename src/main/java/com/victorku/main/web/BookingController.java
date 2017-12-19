@@ -35,18 +35,18 @@ public class BookingController {
         return new ResponseEntity<>(convert(booking), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.PUT)
-    public ResponseEntity<?> createBooking(@RequestBody RequestBookingEntityDTO requestBookingEntityDTO) {
+    @RequestMapping(value = "/request", method = RequestMethod.PUT)
+    public ResponseEntity<?> bookingRequest(@RequestBody RequestBookingEntityDTO requestBookingEntityDTO) {
         List<Booking> bookingList = new ArrayList<>();
 
         // Сортируем брони по времени подачи заявок
         Collections.sort(requestBookingEntityDTO.getBookingsList(),
-                (t2, t1) -> (int)(t2.getRequestDate().getLocalDateData().toDateTime().getMillis() - t1.getRequestDate().getLocalDateData().toDateTime().getMillis()));
+                (t2, t1) -> (int) (t2.getRequestDate().getLocalDateData().toDateTime().getMillis() - t1.getRequestDate().getLocalDateData().toDateTime().getMillis()));
 
         for (BookingDTO bookingDTO : requestBookingEntityDTO.getBookingsList()) {
             LocalDateTime requestDate = bookingDTO.getRequestDate() == null ? null : bookingDTO.getRequestDate().getLocalDateData();
             LocalDateTime bookingDate = bookingDTO.getBookingDate() == null ? null : bookingDTO.getBookingDate().getLocalDateData();
-            Booking booking = bookingService.createBooking(requestBookingEntityDTO.getCompanyWorkTime(), requestDate, bookingDTO.getEmployee(),
+            Booking booking = bookingService.bookingRequest(requestBookingEntityDTO.getCompanyWorkTime(), requestDate, bookingDTO.getEmployee(),
                     bookingDate, bookingDTO.getBookingTime());
             if (booking != null) {
                 bookingList.add(booking);
@@ -54,9 +54,22 @@ public class BookingController {
         }
         // Сортируем заявки для группировки до дням на выходе
         Collections.sort(bookingList,
-                (t2, t1) -> (int)(t2.getBookingDate().toDateTime().getMillis() - t1.getBookingDate().toDateTime().getMillis()));
+                (t2, t1) -> (int) (t2.getBookingDate().toDateTime().getMillis() - t1.getBookingDate().toDateTime().getMillis()));
 
         return new ResponseEntity<>(convert(bookingList), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/create", method = RequestMethod.PUT)
+    public ResponseEntity<?> create(@RequestBody ListBookingsDTO listBookingsDTO) {
+
+        for (BookingDTO bookingDTO : listBookingsDTO.getBookingsDTOList()) {
+            LocalDateTime requestDate = bookingDTO.getRequestDate() == null ? null : bookingDTO.getRequestDate().getLocalDateData();
+            LocalDateTime bookingDate = bookingDTO.getBookingDate() == null ? null : bookingDTO.getBookingDate().getLocalDateData();
+            Booking booking = bookingService.create(bookingDTO.getCompanyWorkTime(), requestDate, bookingDTO.getEmployee(),
+                    bookingDate, bookingDTO.getBookingTime());
+        }
+
+        return new ResponseEntity<>(convert((Booking) null), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/findByDate", method = RequestMethod.GET)

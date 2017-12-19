@@ -9,7 +9,9 @@ public interface BookingService {
 
     Booking getBookingById(Long bookingId);
 
-    Booking createBooking(String companyWorkTime, LocalDateTime requestDate, String employee, LocalDateTime bookingDate, Long bookingTime);
+    Booking bookingRequest(String companyWorkTime, LocalDateTime requestDate, String employee, LocalDateTime bookingDate, Long bookingTime);
+
+    Booking create(String companyWorkTime, LocalDateTime requestDate, String employee, LocalDateTime bookingDate, Long bookingTime);
 
     List<Booking> getBookingsByDate(LocalDateTime start, LocalDateTime end);
 }
