@@ -25,7 +25,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Booking createBooking(String companyWorkTime, LocalDateTime requestDate, String employee, LocalDateTime bookingDate, Long bookingTime) {
+    public Booking bookingRequest(String companyWorkTime, LocalDateTime requestDate, String employee, LocalDateTime bookingDate, Long bookingTime) {
 
         Booking booking = new Booking(companyWorkTime, requestDate, employee, bookingDate, bookingTime);
         LocalDateTime start = new LocalDateTime(bookingDate.getYear(), bookingDate.getMonthOfYear(), bookingDate.getDayOfMonth(), 0, 0, 0);
@@ -35,10 +35,16 @@ public class BookingServiceImpl implements BookingService {
         int[] workTimeArr = parseWorkTime(companyWorkTime);
 
         if (checkWorKTimeExtremums(bookingDate, bookingTime, workTimeArr) && checkTimeFree(booking, bookingList)) {
-            return bookingRepository.save(booking);
+            return booking;
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Booking create(String companyWorkTime, LocalDateTime requestDate, String employee, LocalDateTime bookingDate, Long bookingTime) {
+        Booking booking = new Booking(companyWorkTime, requestDate, employee, bookingDate, bookingTime);
+        return bookingRepository.save(booking);
     }
 
     @Override
