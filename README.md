@@ -5,7 +5,7 @@
 
 * CREATE DATABASE booking_system;
 * CREATE USER viktor_kulygin WITH password '123456';
-* GRANT ALL ON DATABASE booking_system TO test_user;
+* GRANT ALL ON DATABASE booking_service TO test_user;
 
 2. Далее импортируем проект как *maven project* в *inteliJJ IDEA* щелкаем по вкладке *Database*
 для того чтобы настроить соединение с базой данных
