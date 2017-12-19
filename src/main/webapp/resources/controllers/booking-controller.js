@@ -68,16 +68,20 @@ app.controller('BookingController', function ($scope, $http) {
         let parseArr = $scope.bookingsRequestData.split("\n");
         let sendData = $scope.preparePutObjects(parseArr);
         $http.put('booking/request', sendData).success(function (data, status, headers, config) {
-            $scope.isNOData === true ? !$scope.isNOData : false;
+            $scope.isBooked = false;
             $scope.post = data;
             if ($scope.post.bookingsDTOList.length === 0) {
                 $scope.isNOData = true;
+                $cop
                 return;
+            } else {
+                $scope.isNOData = false;
+                $scope.dataForBooking = $scope.prepareSuccessfullBookingData(data.bookingsDTOList);
+                $scope.parseBookingData($scope.post.bookingsDTOList);
+                $scope.successfullBookingsData = $scope.post.bookingsDTOList;
+                $scope.isRequested = true;
             }
-            $scope.dataForBooking = $scope.prepareSuccessfullBookingData(data.bookingsDTOList);
-            $scope.parseBookingData($scope.post.bookingsDTOList);
-            $scope.successfullBookingsData = $scope.post.bookingsDTOList;
-            $scope.isRequested = true;
+
         }).error(function (data, status, headers, config) {
             alert("При бронировании возникла ошибка,проверьте корректность введенных данных");
         });
