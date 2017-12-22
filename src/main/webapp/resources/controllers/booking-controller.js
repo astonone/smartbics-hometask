@@ -1,10 +1,10 @@
 var app = angular.module('booking-service', []);
 app.controller('BookingController', function ($scope, $http) {
 
-    $scope.serverError;
-    $scope.uncorrectlyDataError;
-    $scope.requestError;
-    $scope.getListBookingsRequestError;
+    $scope.serverError = false;
+    $scope.uncorrectlyDataError = false;
+    $scope.requestError= false;
+    $scope.getListBookingsRequestError= false;
     $scope.isNotEmpty = false;
     $scope.existsBookingsByDate = "";
     $scope.bookingsData = [];
@@ -18,18 +18,18 @@ app.controller('BookingController', function ($scope, $http) {
     $scope.getBookingsByDate = function () {
         let dateArr = $scope.existsBookingsByDate.split("/");
         let url = "booking/findByDate?year=" + dateArr[0] + "&month=" + dateArr[1] + "&day=" + dateArr[2];
-        $http.get(url)
-            .success(function (data, status, headers, config) {
-                $scope.bookingsData = data.bookingsDTOList;
-                $scope.parseBookingData($scope.bookingsData);
-                $scope.bookingsData.length === 0 ? $scope.isNotEmpty = false : $scope.isNotEmpty = true;
-                $scope.getListBookingsRequestError = false;
-            })
-            .error(function (data, status, headers, config) {
-                $scope.isNotEmpty = false;
-                $scope.getListBookingsRequestError = true;
-            });
-
+        $http({
+            method: 'GET',
+            url: url
+        }).then(function successCallback(response) {
+            $scope.bookingsData = response.data.bookingsDTOList;
+            $scope.parseBookingData($scope.bookingsData);
+            $scope.bookingsData.length === 0 ? $scope.isNotEmpty = false : $scope.isNotEmpty = true;
+            $scope.getListBookingsRequestError = false;
+        }, function errorCallback(response) {
+            $scope.isNotEmpty = false;
+            $scope.getListBookingsRequestError = true;
+        });
     };
 
     $scope.parseBookingData = function (bookingData) {
