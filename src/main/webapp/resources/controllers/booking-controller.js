@@ -1,6 +1,8 @@
 var app = angular.module('booking-service', []);
 app.controller('BookingController', function ($scope, $http) {
 
+    $scope.error;
+    $scope.isNotEmpty = false;
     $scope.existsBookingsByDate = "";
     $scope.bookingsData = [];
     $scope.bookingsRequestData = "";
@@ -12,15 +14,17 @@ app.controller('BookingController', function ($scope, $http) {
 
     $scope.getBookingsByDate = function () {
         let dateArr = $scope.existsBookingsByDate.split("/");
-        console.log(dateArr);
         let url = "booking/findByDate?year=" + dateArr[0] + "&month=" + dateArr[1] + "&day=" + dateArr[2];
         $http.get(url)
             .success(function (data, status, headers, config) {
                 $scope.bookingsData = data.bookingsDTOList;
                 $scope.parseBookingData($scope.bookingsData);
+                $scope.bookingsData.length === 0 ? $scope.isNotEmpty = false : $scope.isNotEmpty = true;
+                $scope.error = false;
             })
             .error(function (data, status, headers, config) {
-                alert("Возникла ошибка, проверьте корректность формата введенной вами даты");
+                $scope.isNotEmpty = false;
+                $scope.error = true;
             });
 
     };

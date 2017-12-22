@@ -109,7 +109,7 @@
                                                         margin-top: 10px" ng-click="getBookingsByDate()">Посмотреть
                                 результаты
                             </button>
-                            <table class="table">
+                            <table class="table" ng-show="isNotEmpty">
                                 <thead>
                                 <tr>
                                     <th>Рабочие часы компании</th>
@@ -129,6 +129,11 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            <div class="alert alert-info" ng-show="!isNotEmpty && !error">
+                                <strong>На введенную дату пока ничего не забронировано</strong>
+                            </div>
+                            <div class="alert alert-danger" ng-show="error">
+                                <strong>Ошибка!</strong> Вы ввели дату в неккоректном формате(отличающемся от ГГГГ/ММ/ДД), либо ввели её не полностью или совсем не ввели</div>
                         </div>
                     </div>
                     <div>
