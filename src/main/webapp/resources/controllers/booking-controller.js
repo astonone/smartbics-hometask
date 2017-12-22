@@ -1,7 +1,10 @@
 var app = angular.module('booking-service', []);
 app.controller('BookingController', function ($scope, $http) {
 
-    $scope.error;
+    $scope.serverError;
+    $scope.uncorrectlyDataError;
+    $scope.requestError;
+    $scope.getListBookingsRequestError;
     $scope.isNotEmpty = false;
     $scope.existsBookingsByDate = "";
     $scope.bookingsData = [];
@@ -20,11 +23,11 @@ app.controller('BookingController', function ($scope, $http) {
                 $scope.bookingsData = data.bookingsDTOList;
                 $scope.parseBookingData($scope.bookingsData);
                 $scope.bookingsData.length === 0 ? $scope.isNotEmpty = false : $scope.isNotEmpty = true;
-                $scope.error = false;
+                $scope.getListBookingsRequestError = false;
             })
             .error(function (data, status, headers, config) {
                 $scope.isNotEmpty = false;
-                $scope.error = true;
+                $scope.getListBookingsRequestError = true;
             });
 
     };
@@ -71,24 +74,35 @@ app.controller('BookingController', function ($scope, $http) {
     $scope.sendRequestForBooking = function () {
         let parseArr = $scope.bookingsRequestData.split("\n");
         let sendData = $scope.preparePutObjects(parseArr);
-        $http.put('booking/request', sendData).success(function (data, status, headers, config) {
-            $scope.isBooked = false;
-            $scope.post = data;
-            if ($scope.post.bookingsDTOList.length === 0) {
-                $scope.isNOData = true;
-                $cop
-                return;
-            } else {
-                $scope.isNOData = false;
-                $scope.dataForBooking = $scope.prepareSuccessfullBookingData(data.bookingsDTOList);
-                $scope.parseBookingData($scope.post.bookingsDTOList);
-                $scope.successfullBookingsData = $scope.post.bookingsDTOList;
-                $scope.isRequested = true;
-            }
+        $scope.isBooked = false;
+        try {
+            $scope.checkData(sendData);
+            $http.put('booking/request', sendData).success(function (data, status, headers, config) {
+                $scope.post = data;
+                if ($scope.post.bookingsDTOList.length === 0) {
+                    $scope.isNOData = true;
+                    $scope.uncorrectlyDataError = false;
+                    return;
+                } else {
+                    $scope.isNOData = false;
+                    $scope.dataForBooking = $scope.prepareSuccessfullBookingData(data.bookingsDTOList);
+                    $scope.parseBookingData($scope.post.bookingsDTOList);
+                    $scope.successfullBookingsData = $scope.post.bookingsDTOList;
+                    $scope.isRequested = true;
+                    $scope.uncorrectlyDataError = false;
+                    $scope.requestError = false;
+                    $scope.getListBookingsRequestError = false;
+                }
 
-        }).error(function (data, status, headers, config) {
-            alert("При бронировании возникла ошибка,проверьте корректность введенных данных");
-        });
+            }).error(function (data, status, headers, config) {
+                $scope.requestError = true;
+            });
+        } catch (err) {
+            $scope.uncorrectlyDataError = true;
+            $scope.requestError = false;
+            $scope.isNOData = false;
+        }
+
     };
 
     $scope.makeBooking = function () {
@@ -96,8 +110,9 @@ app.controller('BookingController', function ($scope, $http) {
         $http.put('booking/create', sendData).success(function (data, status, headers, config) {
             $scope.isRequested = false;
             $scope.isBooked = true;
+            $scope.uncorrectlyDataError = false;
         }).error(function (data, status, headers, config) {
-            alert("При бронировании возникла ошибка,проверьте корректность введенных данных");
+            $scope.serverError = true;
         });
     };
 
@@ -147,4 +162,28 @@ app.controller('BookingController', function ($scope, $http) {
         }
         return {companyWorkTime: workTimes, bookingsList: result};
     };
+
+    $scope.checkData = function (entity) {
+        for (let i = 0; i < entity.bookingsList.length; i++) {
+            if (entity.companyWorkTime === undefined ||
+                entity.bookingsList[i].employee === undefined ||
+                entity.bookingsList[i].bookingTime === undefined ||
+                entity.bookingsList[i].requestDate.year === undefined ||
+                entity.bookingsList[i].requestDate.month === undefined ||
+                entity.bookingsList[i].requestDate.day === undefined ||
+                entity.bookingsList[i].requestDate.hours === undefined ||
+                entity.bookingsList[i].requestDate.minutes === undefined ||
+                entity.bookingsList[i].requestDate.seconds === undefined ||
+                entity.bookingsList[i].bookingDate.year === undefined ||
+                entity.bookingsList[i].bookingDate.month === undefined ||
+                entity.bookingsList[i].bookingDate.day === undefined ||
+                entity.bookingsList[i].bookingDate.hours === undefined ||
+                entity.bookingsList[i].bookingDate.minutes === undefined ||
+                entity.bookingsList[i].bookingDate.seconds === undefined) {
+                throw new SyntaxError("Данные некорректны");
+            }
+        }
+
+    };
+
 });

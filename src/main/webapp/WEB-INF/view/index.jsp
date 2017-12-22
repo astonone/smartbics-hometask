@@ -31,8 +31,13 @@
                                                         margin-top: 10px" ng-click="sendRequestForBooking()">Запрос на
                             бронирование
                         </button>
-                        <div class="alert alert-danger" ng-show="isNOData">
-                            <strong>Отказ!</strong> По вашему запросу нельзя ничего забронировать
+                        <div class="alert alert-warning" ng-show="uncorrectlyDataError">
+                            <strong>Предупреждение!</strong> Вы допустили синтаксическую или любую другу ошибку
+                            при вводе запроса на бронирование
+                        </div>
+                        <div class="alert alert-danger" ng-show="isNOData || requestError">
+                            <strong>Отказ!</strong> По вашему запросу нельзя ничего забронировать, возможно время уже занято или
+                            введенные данные не полные, или по какой-то причине сервер перестал отвечать на запросы
                         </div>
                         <div class="alert alert-success" ng-show="isRequested && !isNoData">
                             <strong>Следующие заявки могут быть успешно забронированы</strong><br>
@@ -59,6 +64,9 @@
                             <strong>Забронировать успешные заявки?</strong><br>
                             <button type="button" class="btn btn-success" ng-click="makeBooking()">Да</button>
                             <button type="button" class="btn btn-danger" ng-click="isRequested = false">Нет</button>
+                        </div>
+                        <div class="alert alert-info" ng-show="serverError">
+                            <strong>Извините!</strong> Произошла неизвестная ошибка, возможно сервер не отвечает на запросы
                         </div>
                         <div class="alert alert-success" ng-show="isBooked">
                             <strong>Указанные выше заявки были успешно забронированы</strong><br>
@@ -129,11 +137,12 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div class="alert alert-info" ng-show="!isNotEmpty && !error">
+                            <div class="alert alert-info" ng-show="!isNotEmpty && !getListBookingsRequestError">
                                 <strong>На введенную дату пока ничего не забронировано</strong>
                             </div>
-                            <div class="alert alert-danger" ng-show="error">
-                                <strong>Ошибка!</strong> Вы ввели дату в неккоректном формате(отличающемся от ГГГГ/ММ/ДД), либо ввели её не полностью или совсем не ввели</div>
+                            <div class="alert alert-danger" ng-show="getListBookingsRequestError">
+                                <strong>Ошибка!</strong> Вы ввели дату в неккоректном формате(отличающемся от ГГГГ/ММ/ДД), либо ввели её не полностью или совсем не ввели,
+                            либо сервер перестал отвечать на запросы</div>
                         </div>
                     </div>
                     <div>
